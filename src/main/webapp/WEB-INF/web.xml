@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
+  <display-name>model1</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.xhtml</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.xhtml</welcome-file>
+  </welcome-file-list>
+  	
+  	<resource-ref>
+		<description>MySQL DataSource</description>	
+		<res-ref-name>jndi/mysql</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>	  
+		<res-auth>Container</res-auth>		
+  	</resource-ref>
+  	
+  	<servlet>
+  		<servlet-name>registServlet</servlet-name>
+  		<servlet-class>com.ch.model1.board.RegistServlet</servlet-class>
+  	</servlet>
+  	<servlet-mapping>
+  		<servlet-name>registServlet</servlet-name>
+  		<url-pattern>/board/regist</url-pattern>
+  	</servlet-mapping>
+  	
+</web-app>
+
+
+
+
+
+
+
+
+
+
