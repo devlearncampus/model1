@@ -4,14 +4,23 @@
 	//나머지 데이터에 대해서는 여러 페이지 링크를 지원해주려면, 총 게시물 수에 대해 산수계산이 요구됨..
 	
 	//기본 전제 조건 - 총 레코드 수가 잇어야 한다..
-	int totalRecord=1526; //총 레코드 수
+	int totalRecord=26; //총 레코드 수
 	int pageSize=10; //페이지당 보여질 레코드 수 
 	int totalPage=(int)Math.ceil((float)totalRecord/pageSize); //총 페이지 수 
 	int blockSize=10; //블럭당 보여질 페이지 수 
 	int currentPage=1; //현재 유저가 보고 있는 페이지 , 이 값은 클라이언트의 get 방식으로 전송된 파라미터로 대체
-	if(request.getParameter("currentPage") !=null){//파라미터가 존재할때만...파라미터가 널이 아닌 경우..
+	if(request.getParameter("currentPage") !=null){//파라미터가 존재할 때만...파라미터가 널이 아닌 경우..
 		currentPage=Integer.parseInt(request.getParameter("currentPage")); //ex)  "7" --> 정수화시켜야함 
 	}
+	int firstPage=currentPage - (currentPage-1)%blockSize; //블럭당 반복문의 시작 값
+	int lastPage=firstPage+(blockSize-1); //블럭당 반복문의 끝값 
+	int num=totalRecord-((currentPage-1)*pageSize); 
+					//페이지당 시작 번호 예) 1page 일때는 26부터 차감....2page 일때는 16부터 차감.. 3page 일때는 6부터 차감.. 
+					//currentPage=1---26
+					//currentPage=2---16
+					//currentPage=3---  6
+					
+					
 %>
 <%="totalRecord "+totalRecord +"<br>"%>
 <%="pageSize "+pageSize +"<br>"%>
@@ -63,8 +72,9 @@ a{text-decoration:none;}
 		</tr>
 		
 		<%for(int i=1;i<=pageSize;i++){ %>
+		<%if(num<1)break;//게시물의 넘버는 1까지만 유효하므로, 1보다 작아지면 반복문 빠져나오기 %>
 		<tr>
-			<td>1</td>
+			<td><%=num-- %></td>
 			<td>오늘 점심 메뉴는?</td>
 			<td>지노</td>
 			<td>2025-12-02</td>
@@ -73,11 +83,12 @@ a{text-decoration:none;}
 		<%} %>
 		<tr>
 			<td colspan="5" align="center">
-				prev
-				<%for(int i=1;i<=blockSize;i++){ %>
+				<a href="/paging/list.jsp?currentPage=<%=firstPage-1%>">prev</a>
+				<%for(int i=firstPage;i<=lastPage;i++){ %>
+				<%if(i>totalPage)break; //총 페이지수를 넘어설 경우 더이상 반복문 수행하면 안됨..%>
 				<a  <%if(currentPage==i){%> class="numStyle"<%}%>   href="/paging/list.jsp?currentPage=<%=i%>">[<%=i%>]</a>
 				<%} %>
-				next
+				<a href="/paging/list.jsp?currentPage=<%=lastPage+1%>">next</a>
 			</td>
 		</tr>
 	</table>
