@@ -27,6 +27,25 @@
   		<servlet-name>registServlet</servlet-name>
   		<url-pattern>/board/regist</url-pattern>
   	</servlet-mapping>
+
+  	<servlet>
+  		<servlet-name>editServlet</servlet-name>
+  		<servlet-class>com.ch.model1.board.EditServlet</servlet-class>
+  	</servlet>
+  	<servlet-mapping>
+  		<servlet-name>editServlet</servlet-name>
+  		<url-pattern>/board/edit</url-pattern>
+  	</servlet-mapping>
+  	
+  	<servlet>
+  		<servlet-name>deleteServlet</servlet-name>
+  		<servlet-class>com.ch.model1.board.DeleteServlet</servlet-class>
+  	</servlet>
+  	<servlet-mapping>
+  		<servlet-name>deleteServlet</servlet-name>
+  		<url-pattern>/board/delete</url-pattern>
+  	</servlet-mapping>
+  	
   	
 </web-app>
 

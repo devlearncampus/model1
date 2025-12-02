@@ -59,7 +59,7 @@ tr:nth-child(even) {
 		%>
 		<tr>
 			<td>Jill</td>
-			<td><%=board.getTitle() %></td>
+			<td><a href="/board/detail.jsp?board_id=<%=board.getBoard_id() %>"><%=board.getTitle() %></a></td>
 			<td><%=board.getWriter()%></td>
 			<td><%=board.getRegdate() %></td>
 			<td><%=board.getHit() %></td>

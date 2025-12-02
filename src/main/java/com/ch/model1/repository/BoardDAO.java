@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 
 import com.ch.model1.dto.Board;
 import com.ch.model1.util.PoolManager;
+import com.mysql.cj.exceptions.CJOperationNotSupportedException;
 
 //데이터베이스의 Board table 에 대한 CURD를 수행하는 객체 
 public class BoardDAO {
@@ -122,49 +123,117 @@ public class BoardDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
-			if(rs!=null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}	
-			
-			if(pstmt!=null) {
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}	
-			if(con !=null) {
-				try {
-					//주의 기존 JDBC코드는 다 사용한 커넥션을 닫았지만, 풀로부터 얻어온 커넥션은 닫으면 안됨...
-					//이 객체는 DataSource 구현체로부터 얻어온 Connection 이기 때문에 일반적 JDBC 의 닫는 close()가 아님
-					con.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				} 
-			}
-			
+			//con, pstmt, rs를 대신 닫아주는 메서드 호출 
+			pool.freeConnection(con, pstmt, rs);
 		}
 		return list; //rs를 대용할 수 잇는 더욱 객체지향적인 형태로 반환...
 	}
 	
-	
-	//U(=update)
-	public void update() {
+	//레코드 한건 가져오기 
+	public Board select(int board_id) {
+		//쿼리 실행을 하기 위한 데이터베이스 접속은 현재 코드에서 시도하지 말고, 
+		//서버 가동과 동시에 확보해놓은 커넥션풀로부터 가져오자!!
+		Connection con=pool.getConnection();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		Board board=null;
+		
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");//드라이버 로드 
-			DriverManager.getConnection("jdbc:mysql://localhost", "servlet", "1234");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			String sql="select * from board where board_id=?";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, board_id);
+			rs=pstmt.executeQuery();//select문 실행!!!!
+			
+			//rs가 죽어도 상관없으려면, 게시물 1건을 표현할 수 있는 대체제를 사용해야 함 
+			//DB의 레코드 1건은 java의 DTO 인스턴스 1개와 매핑...
+			if(rs.next()) { //next()가 true인 경우 즉 쿼리 실행에 의해 조건에 맞는 레코드가  존재할때만 DTO를 반환하자
+				board = new Board(); //empty 텅빈 상태
+				
+				//ResultSet 이 보유하고 있었던 데이터를 DTO로 옮기기 
+				board.setBoard_id(rs.getInt("board_id")); //board_id
+				board.setTitle(rs.getString("title")); //title
+				board.setWriter(rs.getString("writer")); //writer
+				board.setContent(rs.getString("content")); //content
+				board.setRegdate(rs.getString("regdate")); //regdate
+				board.setHit(rs.getInt("hit")); //hit
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}		
+		}finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return board;
+	}
+	
+	//U(=update) , 레코드 1건 수정 
+	public int update(Board board) {//호출자로 하여금 파라미터를 모아서 달라는 뜻~~
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		int result=0;//쿼리 실행 결과를 반환할 지역변수 , 지역변수이다 보니 개발자가 직접 초기화해야 한다..
+		
+		con=pool.getConnection(); //새로운 접속이 아니라, 이미 접속이 확보된 풀로부터 대여!!
+		String sql="update board set title=?, writer=?, content=? where board_id=?";
+		
+		try {
+			pstmt=con.prepareStatement(sql);
+			pstmt.setString(1, board.getTitle());
+			pstmt.setString(2, board.getWriter());
+			pstmt.setString(3, board.getContent());
+			pstmt.setInt(4,board.getBoard_id());
+			
+			result=pstmt.executeUpdate();//DML 수행
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return result;
+	}
+	
+	//D(=delete)  레코드 한건 삭제 
+	public int delete(int board_id) {
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		int result=0; //삭제 후 반환할 값  
+		
+		con=pool.getConnection();
+		
+		String sql="delete from board where board_id=?";
+		try {
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, board_id);
+			result=pstmt.executeUpdate();//쿼리수행
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			pool.freeConnection(con, pstmt); //DML 수행 후 반납 
+		}
+		return result;
 		
 	}
 	
-	//D(=delete)
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
