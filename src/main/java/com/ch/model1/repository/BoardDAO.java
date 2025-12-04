@@ -19,7 +19,7 @@ import com.mysql.cj.exceptions.CJOperationNotSupportedException;
 //데이터베이스의 Board table 에 대한 CURD를 수행하는 객체 
 public class BoardDAO {
 	
-	PoolManager pool=new PoolManager();
+	PoolManager pool=PoolManager.getInstance();//직접 new 하지 않고 싱글턴 메서드에 의해 인스턴스 얻기
 	
 	//Create(=insert)
 	//글 1건을 등록하는 메서드 
