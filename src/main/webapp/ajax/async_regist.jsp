@@ -41,7 +41,7 @@
 	//해결책- 서버에서는 화면전체를 보내지 말고, 순수하게 목록 데이터만을 전송해주면, 클라이언트는 그 데이터를 js로 동적 처리...
 		
 	//게시물 목록 가져오기!!
-	List<Member2> list=dao.selectAll();
+	//List<Member2> list=dao.selectAll();
 	
 	//클라이언트에게 목록 데이터 보내기 
 	//out.print(list);
@@ -60,9 +60,9 @@
 	*/
 	
 	//아래의 json 문자열은 말 그대로 문자열이므로, java는 그냥 String으로 처리한다..
-	StringBuffer data= new StringBuffer();
-
-
+	//StringBuffer data= new StringBuffer();
+	
+	/*
 	data.append("[");
 	for(int i=0; i<list.size();i++){
 		Member2 obj=list.get(i);
@@ -80,6 +80,7 @@
 	System.out.println(data.toString()); 
 	
 	out.print(data.toString()); //클라이언트인 웹브라우저에게 보내기 
+	*/
 	
 	//만일 요청의 유형이 동기방식이 이었다면, 유저는 목록화면을 보아야 하므로, 아래와 같은 코드를 작성해야 함 
 	//out.print("location.href=list.jsp;"); 브라우저로 하여금 list.jsp로 다시 들어오라는 명령이므로, 유저의 브라우저는

@@ -20,6 +20,23 @@
 	    <artifactId>mysql-connector-java</artifactId>
 	    <version>8.0.33</version>
 	</dependency> 	
+	
+	<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+	<dependency>
+	    <groupId>org.projectlombok</groupId>
+	    <artifactId>lombok</artifactId>
+	    <version>1.18.24</version>
+	</dependency>	
+
+	<!-- 
+	문자열인 JSON 문자열과 자바객체(DTO)사이의 변환을 자동으로 해준다!!
+		-js에서도 비슷한 객체가 있다..(JSON 내장객체와 비슷 )		
+	-->	
+	<dependency>
+	    <groupId>com.fasterxml.jackson.core</groupId>
+	    <artifactId>jackson-databind</artifactId>
+	    <version>2.13.4.2</version>
+	</dependency>
 </dependencies>
   
 </project>

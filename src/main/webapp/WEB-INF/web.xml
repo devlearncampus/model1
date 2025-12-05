@@ -45,6 +45,16 @@
   		<servlet-name>deleteServlet</servlet-name>
   		<url-pattern>/board/delete</url-pattern>
   	</servlet-mapping>
+
+	<!-- 뉴스기사 등록 -->
+  	<servlet>
+  		<servlet-name>newsRegist</servlet-name>
+  		<servlet-class>com.ch.model1.news.RegistServlet</servlet-class>
+  	</servlet>
+  	<servlet-mapping>
+  		<servlet-name>newsRegist</servlet-name>
+  		<url-pattern>/news/regist</url-pattern>
+  	</servlet-mapping>
   	
   	
 </web-app>

@@ -1,8 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
-<%@ page import="com.ch.model1.repository.BoardDAO" %>
 <%@ page import="java.sql.ResultSet" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.ch.model1.dto.Board" %>
+<%@ page import="com.ch.model1.repository.BoardDAO" %>
 <%!
 	//!를 표기하면, 선언부를 의미...선언부란 이 jsp가 추후 서블릿으로 변경될때 멤버영역
 	BoardDAO boardDAO=new BoardDAO();
