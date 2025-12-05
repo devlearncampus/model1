@@ -70,6 +70,37 @@ public class NewsDAO {
 		return list;
 	}
 	
+	//한컨 레코드 가져오기 
+	public News select(int news_id) {
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		News dto=null; //한건 이므로 뉴스 1개를 반환 
+		
+		con=poolManager.getConnection();
+		
+		String sql="select * from news where news_id=?"; 
+		try {
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, news_id);
+			rs=pstmt.executeQuery();//rs 생성
+			
+			if(rs.next()) {//레코드가 있다면.. 
+				dto = new News();	
+				dto.setNews_id(rs.getInt("news_id"));
+				dto.setTitle(rs.getString("title"));
+				dto.setWriter(rs.getString("writer"));
+				dto.setContent(rs.getString("content"));
+				dto.setRegdate(rs.getString("regdate"));
+				dto.setHit(rs.getInt("hit"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			poolManager.freeConnection(con, pstmt, rs);
+		}
+		return dto;
+	}
 	
 }
 
