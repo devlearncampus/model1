@@ -46,9 +46,18 @@ public class NewsDAO {
 		
 		con=poolManager.getConnection();
 		
-		String sql="select * from news order by news_id desc";//내림차순 
+		StringBuffer sb = new StringBuffer();
+		sb.append("select n.news_id as news_id, title, writer, regdate,hit, count(comment_id) as cnt");
+		sb.append(" from news n left outer join comment c");
+		sb.append(" on n.news_id = c.news_id");
+		sb.append(" group by n.news_id, title, writer, regdate,hit");
+		sb.append(" order by n.news_id desc");
+		
+		System.out.println(sb.toString());
+		
+		
 		try {
-			pstmt=con.prepareStatement(sql);
+			pstmt=con.prepareStatement(sb.toString());
 			rs=pstmt.executeQuery();//rs 생성
 			
 			while (rs.next()) {
@@ -56,9 +65,9 @@ public class NewsDAO {
 				dto.setNews_id(rs.getInt("news_id"));
 				dto.setTitle(rs.getString("title"));
 				dto.setWriter(rs.getString("writer"));
-				dto.setContent(rs.getString("content"));
 				dto.setRegdate(rs.getString("regdate"));
 				dto.setHit(rs.getInt("hit"));
+				dto.setCnt(rs.getInt("cnt"));
 				
 				list.add(dto);
 			}

@@ -12,6 +12,7 @@ public class News {
 	private String content;
 	private String regdate;
 	private int hit;
+	private int cnt;//꼼수 - mybatis 같은 프레임웍을 사용하면 이런 처리는 불필요..
 	//하나의 뉴스기사는 다수의 자식을 보유할 수 있다..
 	private List<Comment> commentList;
 }
